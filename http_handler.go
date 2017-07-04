@@ -1,7 +1,16 @@
 package main
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
-// HandleHTTP handles the HTTP request/response process
-func HandleHTTP(w http.ResponseWriter, r *http.Request) {
+// HTTPHandler represents an HTTP handler for process listing
+type HTTPHandler struct {
+	processLister ProcessLister
+}
+
+// ServeHTTP handles the HTTP request/response process
+func (h *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	json.NewEncoder(w).Encode(h.processLister.List())
 }
