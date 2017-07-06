@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 	"regexp"
 
 	"github.com/spf13/afero"
@@ -23,21 +24,21 @@ func (l *ProcessList) List() []*Process {
 	procDirs, err := l.GetProcDirs()
 
 	// initialize an array to hold the proccess objects
-	procList := []*Process{}
+	plist := []*Process{}
 
 	// error checking
 	if err != nil {
-		return procList
+		return plist
 	}
 
 	// loop over the proc dirs to initialize a process object for each
 	for _, dir := range procDirs {
-		if process := NewProcess(l.fs, dir); process != (&Process{}) {
-			procList = append(procList, process)
+		if process := NewProcess(l.fs, dir); process != (&Process{}) && filepath.Base(os.Args[0]) != process.Comm {
+			plist = append(plist, process)
 		}
 	}
 
-	return procList
+	return plist
 }
 
 // GetProcDirs returns a list of proc dirs
