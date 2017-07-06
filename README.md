@@ -2,8 +2,8 @@
 
 > process list web server
 
-`go-ps-rest` uses [procfs](https://en.wikipedia.org/wiki/Procfs) to obtain a list
-of processes for display over a http api
+`go-ps-rest` uses [procfs](https://en.wikipedia.org/wiki/Procfs) to obtain a
+list of processes for display over an http api
 
 ## Installation
 
