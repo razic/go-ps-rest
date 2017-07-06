@@ -2,13 +2,17 @@
 
 > process list web server
 
-`ps-rest` uses [procf](https://en.wikipedia.org/wiki/Procfs) to obtain a list
+`ps-rest` uses [procfs](https://en.wikipedia.org/wiki/Procfs) to obtain a list
 of processes for display over a http api
 
 ## Installation
 
 Running `go get github.com/razic/go-ps-rest` will install a `go-ps-rest` binary
 to `$GOPATH/bin`.
+
+## Supported Platforms
+
+* Linux
 
 ## Usage
 
