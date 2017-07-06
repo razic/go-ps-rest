@@ -19,7 +19,25 @@ type ProcessList struct {
 
 // List returns process list
 func (l *ProcessList) List() []*Process {
-	return []*Process{}
+	// get a list of all proc dirs
+	procDirs, err := l.GetProcDirs()
+
+	// initialize an array to hold the proccess objects
+	procList := []*Process{}
+
+	// error checking
+	if err != nil {
+		return procList
+	}
+
+	// loop over the proc dirs to initialize a process object for each
+	for _, dir := range procDirs {
+		if process := NewProcess(l.fs, dir); process != (&Process{}) {
+			procList = append(procList, process)
+		}
+	}
+
+	return procList
 }
 
 // GetProcDirs returns a list of proc dirs
