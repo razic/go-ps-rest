@@ -17,6 +17,9 @@ func init() {
 	// populate in-memory file system
 	fs.MkdirAll("/proc/1", 0755)
 	fs.MkdirAll("/proc/fs", 0755)
+	afero.WriteFile(fs, "/proc/1/comm", []byte("bash\n"), 0644)
+	afero.WriteFile(fs, "/proc/1/cmdline", []byte("bash\x00/foo\x00"), 0644)
+
 }
 
 func TestNewProcess(t *testing.T) {
@@ -46,9 +49,15 @@ func TestGetPidFromDir(t *testing.T) {
 func TestGetCommFromDir(t *testing.T) {
 	stat, _ := fs.Stat("/proc/1")
 
-	afero.WriteFile(fs, "/proc/1/comm", []byte("bash\n"), 0644)
-
 	if comm := GetCommFromDir(fs, stat); comm != "bash" {
 		t.Fatalf("expected \"bash\", got: %q", comm)
+	}
+}
+
+func TestGetCmdlineFromDir(t *testing.T) {
+	stat, _ := fs.Stat("/proc/1")
+
+	if cmdline := GetCmdlineFromDir(fs, stat); cmdline != "bash /foo" {
+		t.Fatalf("expected \"bash /foo\", got: %q", cmdline)
 	}
 }
