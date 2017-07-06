@@ -14,7 +14,7 @@ type Process struct {
 	Pid     int      `json:"pid"`
 	Comm    string   `json:"name"`
 	Cmdline string   `json:"cmdline"`
-	Environ []string `json:"environment,"`
+	Environ []string `json:"environment"`
 }
 
 // NewProcess takes a filesystem and directory, and populates the struct fields
