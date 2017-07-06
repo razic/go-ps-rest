@@ -23,7 +23,7 @@ func NewProcess(fs afero.Fs, dir os.FileInfo) *Process {
 		Pid:     GetPidFromDir(dir),
 		Comm:    GetCommFromDir(fs, dir),
 		Cmdline: GetCmdlineFromDir(fs, dir),
-		//Environ: GetEnvironFromDir(fs, dir),
+		Environ: GetEnvironFromDir(fs, dir),
 	}
 }
 
