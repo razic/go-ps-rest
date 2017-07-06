@@ -1,6 +1,7 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/spf13/afero"
@@ -19,6 +20,7 @@ func init() {
 	fs.MkdirAll("/proc/fs", 0755)
 	afero.WriteFile(fs, "/proc/1/comm", []byte("bash\n"), 0644)
 	afero.WriteFile(fs, "/proc/1/cmdline", []byte("bash\x00/foo\x00"), 0644)
+	afero.WriteFile(fs, "/proc/1/environ", []byte("PATH=/bin\x00LANG=en_US.UTF8\x00"), 0644)
 
 }
 
@@ -59,5 +61,24 @@ func TestGetCmdlineFromDir(t *testing.T) {
 
 	if cmdline := GetCmdlineFromDir(fs, stat); cmdline != "bash /foo" {
 		t.Fatalf("expected \"bash /foo\", got: %q", cmdline)
+	}
+}
+
+func TestGetEnvironFromDir(t *testing.T) {
+	stat, _ := fs.Stat("/proc/1")
+
+	expectedEnviron := []string{
+		"PATH=/bin",
+		"LANG=en_US.UTF8",
+	}
+
+	environ := GetEnvironFromDir(fs, stat)
+
+	if len(environ) != len(expectedEnviron) {
+		t.Fatalf("expected %d, got: %d (%v vs %v)", len(expectedEnviron), len(environ), expectedEnviron, environ)
+	}
+
+	if reflect.DeepEqual(environ, expectedEnviron) != true {
+		t.Fatalf("expected %q got %q", expectedEnviron, environ)
 	}
 }
